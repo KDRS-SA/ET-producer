@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<premis:premis xmlns:premis="http://arkivverket.no/standarder/PREMIS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://arkivverket.no/standarder/PREMIS http://schema.arkivverket.no/PREMIS/v2.0/DIAS_PREMIS.xsd" version="2.0">
+  <premis:object xsi:type="premis:file">
+    <premis:objectIdentifier>
+      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>
+      <premis:objectIdentifierValue></premis:objectIdentifierValue>
+    </premis:objectIdentifier>
+    <premis:preservationLevel>
+      <premis:preservationLevelValue>full</premis:preservationLevelValue>
+    </premis:preservationLevel>
+    <premis:objectCharacteristics>
+      <premis:compositionLevel>0</premis:compositionLevel>
+      <premis:format>
+        <premis:formatDesignation>
+          <premis:formatName>tar</premis:formatName>
+        </premis:formatDesignation>
+      </premis:format>
+    </premis:objectCharacteristics>
+    <premis:storage>
+      <premis:storageMedium>ESSArch Tools</premis:storageMedium>
+    </premis:storage>
+  </premis:object>
+  <premis:object xsi:type="premis:file">
+    <premis:objectIdentifier>
+      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>
+      <premis:objectIdentifierValue>/administrative_metadata/DIAS_PREMIS.xsd</premis:objectIdentifierValue>
+    </premis:objectIdentifier>
+    <premis:objectCharacteristics>
+      <premis:compositionLevel>0</premis:compositionLevel>
+      <premis:fixity>
+        <premis:messageDigestAlgorithm>SHA-256</premis:messageDigestAlgorithm>
+        <premis:messageDigest>5131975b732ca285dbb4dfdafd85dde122eb384db3984e9aec2598057671e017</premis:messageDigest>
+        <premis:messageDigestOriginator>ESSArch</premis:messageDigestOriginator>
+      </premis:fixity>
+      <premis:size>48676</premis:size>
+      <premis:format>
+        <premis:formatDesignation>
+          <premis:formatName>xml</premis:formatName>
+        </premis:formatDesignation>
+      </premis:format>
+    </premis:objectCharacteristics>
+    <premis:storage>
+      <premis:contentLocation>
+        <premis:contentLocationType>SIP</premis:contentLocationType>
+        <premis:contentLocationValue></premis:contentLocationValue>
+      </premis:contentLocation>
+    </premis:storage>
+    <premis:relationship>
+      <premis:relationshipType>structural</premis:relationshipType>
+      <premis:relationshipSubType>is part of</premis:relationshipSubType>
+      <premis:relatedObjectIdentification>
+        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>
+        <premis:relatedObjectIdentifierValue></premis:relatedObjectIdentifierValue>
+      </premis:relatedObjectIdentification>
+    </premis:relationship>
+  </premis:object>
+  <premis:object xsi:type="premis:file">
+    <premis:objectIdentifier>
+      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>
+      <premis:objectIdentifierValue>/mets.xsd</premis:objectIdentifierValue>
+    </premis:objectIdentifier>
+    <premis:objectCharacteristics>
+      <premis:compositionLevel>0</premis:compositionLevel>
+      <premis:fixity>
+        <premis:messageDigestAlgorithm>SHA-256</premis:messageDigestAlgorithm>
+        <premis:messageDigest>e94fa1f0a9fccda6ddcdf56a9361c058d32bc46d8b601d264d75fd43a9260a43</premis:messageDigest>
+        <premis:messageDigestOriginator>ESSArch</premis:messageDigestOriginator>
+      </premis:fixity>
+      <premis:size>142834</premis:size>
+      <premis:format>
+        <premis:formatDesignation>
+          <premis:formatName>xml</premis:formatName>
+        </premis:formatDesignation>
+      </premis:format>
+    </premis:objectCharacteristics>
+    <premis:storage>
+      <premis:contentLocation>
+        <premis:contentLocationType>SIP</premis:contentLocationType>
+        <premis:contentLocationValue></premis:contentLocationValue>
+      </premis:contentLocation>
+    </premis:storage>
+    <premis:relationship>
+      <premis:relationshipType>structural</premis:relationshipType>
+      <premis:relationshipSubType>is part of</premis:relationshipSubType>
+      <premis:relatedObjectIdentification>
+        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>
+        <premis:relatedObjectIdentifierValue></premis:relatedObjectIdentifierValue>
+      </premis:relatedObjectIdentification>
+    </premis:relationship>
+  </premis:object>
+  <premis:agent>
+    <premis:agentIdentifier>
+      <premis:agentIdentifierType>NO/RA</premis:agentIdentifierType>
+      <premis:agentIdentifierValue>ESSArch</premis:agentIdentifierValue>
+    </premis:agentIdentifier>
+    <premis:agentName>ESSArch Tools</premis:agentName>
+    <premis:agentType>software</premis:agentType>
+  </premis:agent>
+</premis:premis>

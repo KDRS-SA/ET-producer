@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/METS/ http://schema.arkivverket.no/METS/mets.xsd" PROFILE="http://xml.ra.se/METS/RA_METS_eARD.xml" LABEL="" TYPE="SIP" ID="" OBJID="">
+    <mets:metsHdr CREATEDATE="" RECORDSTATUS="NEW">
+        <mets:agent TYPE="ORGANIZATION" ROLE="ARCHIVIST">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="ORGANIZATION" ROLE="CREATOR">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="PRODUCER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="PRODUCER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="PRODUCER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="SUBMITTER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="SUBMITTER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="ORGANIZATION" ROLE="IPOWNER">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:agent TYPE="ORGANIZATION" ROLE="PRESERVATION">
+            <mets:name></mets:name>
+        </mets:agent>
+        <mets:altRecordID TYPE="SUBMISSIONAGREEMENT"></mets:altRecordID>
+        <mets:altRecordID TYPE="STARTDATE"></mets:altRecordID>
+        <mets:altRecordID TYPE="ENDDATE"></mets:altRecordID>
+        <mets:metsDocumentID>mets.xml</mets:metsDocumentID>
+    </mets:metsHdr>
+    <mets:amdSec ID="amdSec001">
+        <mets:digiprovMD ID="digiprovMD001">
+            <mets:mdRef MIMETYPE="text/xml" CHECKSUMTYPE="SHA-256" CHECKSUM="" MDTYPE="PREMIS" xlink:href="file:administrative_metadata/premis.xml" LOCTYPE="URL" CREATED="" xlink:type="simple" ID="" SIZE=""/>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:fileSec>
+        <mets:fileGrp ID="fgrp001" USE="FILES">
+            <mets:file MIMETYPE="application/xml" CHECKSUMTYPE="SHA-256" CREATED="" CHECKSUM="5131975b732ca285dbb4dfdafd85dde122eb384db3984e9aec2598057671e017" USE="Datafile" ID="" SIZE="48676">
+                <mets:FLocat xlink:href="file:administrative_metadata/DIAS_PREMIS.xsd" LOCTYPE="URL" xlink:type="simple"/>
+            </mets:file>
+            <mets:file MIMETYPE="application/xml" CHECKSUMTYPE="SHA-256" CREATED="" CHECKSUM="e94fa1f0a9fccda6ddcdf56a9361c058d32bc46d8b601d264d75fd43a9260a43" USE="Datafile" ID="" SIZE="142834">
+                <mets:FLocat xlink:href="file:mets.xsd" LOCTYPE="URL" xlink:type="simple"/>
+            </mets:file>
+        </mets:fileGrp>
+    </mets:fileSec>
+    <mets:structMap>
+        <mets:div LABEL="Package">
+            <mets:div ADMID="amdSec001" LABEL="Content Description">
+                <mets:fptr FILEID=""/>
+            </mets:div>
+            <mets:div ADMID="amdSec001" LABEL="Datafiles">
+                <mets:fptr FILEID=""/>
+                <mets:fptr FILEID=""/>
+            </mets:div>
+        </mets:div>
+    </mets:structMap>
+</mets:mets>

@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<premis:premis xmlns:premis="http://arkivverket.no/standarder/PREMIS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://arkivverket.no/standarder/PREMIS http://schema.arkivverket.no/PREMIS/v2.0/DIAS_PREMIS.xsd" version="2.0">
+  <premis:object xsi:type="premis:file">
+    <premis:objectIdentifier>
+      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>
+      <premis:objectIdentifierValue></premis:objectIdentifierValue>
+    </premis:objectIdentifier>
+    <premis:preservationLevel>
+      <premis:preservationLevelValue>full</premis:preservationLevelValue>
+    </premis:preservationLevel>
+    <premis:significantProperties>
+      <premis:significantPropertiesType>aic_object</premis:significantPropertiesType>
+      <premis:significantPropertiesValue></premis:significantPropertiesValue>
+    </premis:significantProperties>
+    <premis:significantProperties>
+      <premis:significantPropertiesType>createdate</premis:significantPropertiesType>
+      <premis:significantPropertiesValue></premis:significantPropertiesValue>
+    </premis:significantProperties>
+    <premis:significantProperties>
+      <premis:significantPropertiesType>archivist_organization</premis:significantPropertiesType>
+      <premis:significantPropertiesValue></premis:significantPropertiesValue>
+    </premis:significantProperties>
+    <premis:significantProperties>
+      <premis:significantPropertiesType>label</premis:significantPropertiesType>
+      <premis:significantPropertiesValue></premis:significantPropertiesValue>
+    </premis:significantProperties>
+    <premis:significantProperties>
+      <premis:significantPropertiesType>iptype</premis:significantPropertiesType>
+      <premis:significantPropertiesValue>SIP</premis:significantPropertiesValue>
+    </premis:significantProperties>
+    <premis:objectCharacteristics>
+      <premis:compositionLevel>0</premis:compositionLevel>
+      <premis:format>
+        <premis:formatDesignation>
+          <premis:formatName>tar</premis:formatName>
+        </premis:formatDesignation>
+      </premis:format>
+    </premis:objectCharacteristics>
+    <premis:storage>
+      <premis:storageMedium>Preservation platform ESSArch</premis:storageMedium>
+    </premis:storage>
+    <premis:relationship>
+      <premis:relationshipType>structural</premis:relationshipType>
+      <premis:relationshipSubType>is part of</premis:relationshipSubType>
+      <premis:relatedObjectIdentification>
+        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>
+        <premis:relatedObjectIdentifierValue></premis:relatedObjectIdentifierValue>
+      </premis:relatedObjectIdentification>
+    </premis:relationship>
+  </premis:object>
+  <premis:event>
+    <premis:eventIdentifier>
+      <premis:eventIdentifierType>NO/RA</premis:eventIdentifierType>
+      <premis:eventIdentifierValue></premis:eventIdentifierValue>
+    </premis:eventIdentifier>
+    <premis:eventType>10000</premis:eventType>
+    <premis:eventDateTime></premis:eventDateTime>
+    <premis:eventDetail>Log circular created</premis:eventDetail>
+    <premis:eventOutcomeInformation>
+      <premis:eventOutcome>0</premis:eventOutcome>
+      <premis:eventOutcomeDetail>
+        <premis:eventOutcomeDetailNote>Success to create logfile</premis:eventOutcomeDetailNote>
+      </premis:eventOutcomeDetail>
+    </premis:eventOutcomeInformation>
+    <premis:linkingAgentIdentifier>
+      <premis:linkingAgentIdentifierType>NO/RA</premis:linkingAgentIdentifierType>
+      <premis:linkingAgentIdentifierValue>admin</premis:linkingAgentIdentifierValue>
+    </premis:linkingAgentIdentifier>
+    <premis:linkingObjectIdentifier>
+      <premis:linkingObjectIdentifierType>NO/RA</premis:linkingObjectIdentifierType>
+      <premis:linkingObjectIdentifierValue></premis:linkingObjectIdentifierValue>
+    </premis:linkingObjectIdentifier>
+  </premis:event>
+</premis:premis>
