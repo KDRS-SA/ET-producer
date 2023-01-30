@@ -1,4 +1,5 @@
 import os
+import sys
 import copy
 import magic
 import shutil
@@ -40,180 +41,104 @@ def import_metadata(path):
 
 def configure_sip_log(log_path, id, create_date):
     print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Configuring sip log.xml...')
-    ET.register_namespace('premis', "http://arkivverket.no/standarder/PREMIS")
-    logfile = ET.parse(log_path)
-    xml_root = logfile.getroot()
-    xml_root.attrib["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
-    
-    xml_root[0][0][1].text = id
-    xml_root[0][3][1].text = create_date
-    xml_root[0][4][1].text = archivist_org_combo.get()
-    xml_root[0][5][1].text = label_entry.get()
-    xml_root[1][0][1].text = str(uuid1())
-    xml_root[1][2].text = create_date
-    xml_root[1][6][1].text = id
-    
-    logfile.write(log_path, encoding="UTF-8", xml_declaration=True, short_empty_elements=False)
-
+    with open(log_path, "w", encoding="utf-8") as fo:
+        string_log = f'<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<premis:premis xmlns:premis="http://arkivverket.no/standarder/PREMIS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://arkivverket.no/standarder/PREMIS http://schema.arkivverket.no/PREMIS/v2.0/DIAS_PREMIS.xsd" version="2.0">\n  <premis:object xsi:type="premis:file">\n    <premis:objectIdentifier>\n      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>\n      <premis:objectIdentifierValue>{id}</premis:objectIdentifierValue>\n    </premis:objectIdentifier>\n    <premis:preservationLevel>\n      <premis:preservationLevelValue>full</premis:preservationLevelValue>\n    </premis:preservationLevel>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>aic_object</premis:significantPropertiesType>\n      <premis:significantPropertiesValue></premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>createdate</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{create_date}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>archivist_organization</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{archivist_org_combo.get()}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>label</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{label_entry.get()}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>iptype</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>SIP</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:objectCharacteristics>\n      <premis:compositionLevel>0</premis:compositionLevel>\n      <premis:format>\n        <premis:formatDesignation>\n          <premis:formatName>tar</premis:formatName>\n        </premis:formatDesignation>\n      </premis:format>\n    </premis:objectCharacteristics>\n    <premis:storage>\n      <premis:storageMedium>Preservation platform ESSArch</premis:storageMedium>\n    </premis:storage>\n    <premis:relationship>\n      <premis:relationshipType>structural</premis:relationshipType>\n      <premis:relationshipSubType>is part of</premis:relationshipSubType>\n      <premis:relatedObjectIdentification>\n        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>\n        <premis:relatedObjectIdentifierValue></premis:relatedObjectIdentifierValue>\n      </premis:relatedObjectIdentification>\n    </premis:relationship>\n  </premis:object>\n  <premis:event>\n    <premis:eventIdentifier>\n      <premis:eventIdentifierType>NO/RA</premis:eventIdentifierType>\n      <premis:eventIdentifierValue>{uuid1()}</premis:eventIdentifierValue>\n    </premis:eventIdentifier>\n    <premis:eventType>10000</premis:eventType>\n    <premis:eventDateTime>{create_date}</premis:eventDateTime>\n    <premis:eventDetail>Log circular created</premis:eventDetail>\n    <premis:eventOutcomeInformation>\n      <premis:eventOutcome>0</premis:eventOutcome>\n      <premis:eventOutcomeDetail>\n        <premis:eventOutcomeDetailNote>Success to create logfile</premis:eventOutcomeDetailNote>\n      </premis:eventOutcomeDetail>\n    </premis:eventOutcomeInformation>\n    <premis:linkingAgentIdentifier>\n      <premis:linkingAgentIdentifierType>NO/RA</premis:linkingAgentIdentifierType>\n      <premis:linkingAgentIdentifierValue>admin</premis:linkingAgentIdentifierValue>\n    </premis:linkingAgentIdentifier>\n    <premis:linkingObjectIdentifier>\n      <premis:linkingObjectIdentifierType>NO/RA</premis:linkingObjectIdentifierType>\n      <premis:linkingObjectIdentifierValue>{id}</premis:linkingObjectIdentifierValue>\n    </premis:linkingObjectIdentifier>\n  </premis:event>\n</premis:premis>'
+        fo.write(string_log)
 
 def configure_sip_premis(premis_path, id, tarfolder):
     print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Configuring sip premis.xml...')
-    premisfile = ET.parse(premis_path)
-    xml_root = premisfile.getroot()
-    xml_root.attrib["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
-    xml_root[0][0][1].text = id
-    for i in range(1, 3):
-        xml_root[i][0][1].text = id + xml_root[i][0][1].text
-        xml_root[i][2][0][1].text = id
-        xml_root[i][3][2][1].text = id
-
-    for root, _, files in os.walk(tarfolder):
-        for file in files:
-            tmp_path = root.split("/")[4].replace("\\", "/") + "/" + file
-            if tmp_path != f'{id}/administrative_metadata/DIAS_PREMIS.xsd' and tmp_path != f'{id}/mets.xsd' and tmp_path != f'{id}/mets.xml' and tmp_path != f'{id}/administrative_metadata/premis.xml':
-                xml_root.insert(len(xml_root)-1, copy.deepcopy(xml_root[1]))
-                xml_root[-2][0][1].text = tmp_path
-                if tmp_path not in INFO_DICT.keys():
-                    sha = hashlib.sha256()
-                    with open(os.path.join(root, file), "rb") as f:
-                        tmp_data = f.read(4000000)
-                        tmp_magic = magic.from_buffer(tmp_data, mime=True)
-                        while len(tmp_data)>0:
-                            sha.update(tmp_data)
+    start_premis = f'<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n <premis:premis xmlns:premis="http://arkivverket.no/standarder/PREMIS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://arkivverket.no/standarder/PREMIS http://schema.arkivverket.no/PREMIS/v2.0/DIAS_PREMIS.xsd" version="2.0">\n  <premis:object xsi:type="premis:file">\n    <premis:objectIdentifier>\n      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>\n      <premis:objectIdentifierValue>{id}</premis:objectIdentifierValue>\n    </premis:objectIdentifier>\n    <premis:preservationLevel>\n      <premis:preservationLevelValue>full</premis:preservationLevelValue>\n    </premis:preservationLevel>\n    <premis:objectCharacteristics>\n      <premis:compositionLevel>0</premis:compositionLevel>\n      <premis:format>\n        <premis:formatDesignation>\n          <premis:formatName>tar</premis:formatName>\n        </premis:formatDesignation>\n      </premis:format>\n    </premis:objectCharacteristics>\n    <premis:storage>\n      <premis:storageMedium>ESSArch Tools</premis:storageMedium>\n    </premis:storage>\n  </premis:object>\n'
+    end_premis = f'  <premis:agent>\n    <premis:agentIdentifier>\n      <premis:agentIdentifierType>NO/RA</premis:agentIdentifierType>\n      <premis:agentIdentifierValue>ESSArch</premis:agentIdentifierValue>\n    </premis:agentIdentifier>\n    <premis:agentName>ESSArch Tools</premis:agentName>\n    <premis:agentType>software</premis:agentType>\n  </premis:agent>\n</premis:premis>'
+    with open(premis_path, "w", encoding="utf-8") as fo:
+        fo.write(start_premis)
+        for root, _, files in os.walk(tarfolder):    
+            for file in files:
+                tmp_path = root.split("/")[4].replace("\\", "/") + "/" + file
+                if tmp_path != f'{id}/mets.xml' and tmp_path != f'{id}/administrative_metadata/premis.xml':
+                    if tmp_path not in INFO_DICT.keys():
+                        sha = hashlib.sha256()
+                        with open(os.path.join(root, file), "rb") as f:
                             tmp_data = f.read(4000000)
-                    INFO_DICT[tmp_path] = [sha.hexdigest(), tmp_magic]
-                xml_root[-2][1][1][1].text = INFO_DICT[tmp_path][0]
-                xml_root[-2][1][2].text = str(os.stat(os.path.join(root, file)).st_size)
-                xml_root[-2][1][3][0][0].text = os.path.splitext(file)[1][1:]
+                            tmp_magic = magic.from_buffer(tmp_data, mime=True)
+                            while len(tmp_data)>0:
+                                sha.update(tmp_data)
+                                tmp_data = f.read(4000000)
+                        INFO_DICT[tmp_path] = [sha.hexdigest(), tmp_magic]
+                    fill_premis = f'  <premis:object xsi:type="premis:file">\n    <premis:objectIdentifier>\n      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>\n      <premis:objectIdentifierValue>{tmp_path}</premis:objectIdentifierValue>\n    </premis:objectIdentifier>\n    <premis:objectCharacteristics>\n      <premis:compositionLevel>0</premis:compositionLevel>\n      <premis:fixity>\n        <premis:messageDigestAlgorithm>SHA-256</premis:messageDigestAlgorithm>\n        <premis:messageDigest>{INFO_DICT[tmp_path][0]}</premis:messageDigest>\n        <premis:messageDigestOriginator>ESSArch</premis:messageDigestOriginator>\n      </premis:fixity>\n      <premis:size>{os.stat(os.path.join(root, file)).st_size}</premis:size>\n      <premis:format>\n        <premis:formatDesignation>\n          <premis:formatName>{os.path.splitext(file)[1][1:]}</premis:formatName>\n        </premis:formatDesignation>\n      </premis:format>\n    </premis:objectCharacteristics>\n    <premis:storage>\n      <premis:contentLocation>\n        <premis:contentLocationType>SIP</premis:contentLocationType>\n        <premis:contentLocationValue>{id}</premis:contentLocationValue>\n      </premis:contentLocation>\n    </premis:storage>\n    <premis:relationship>\n      <premis:relationshipType>structural</premis:relationshipType>\n      <premis:relationshipSubType>is part of</premis:relationshipSubType>\n      <premis:relatedObjectIdentification>\n        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>\n        <premis:relatedObjectIdentifierValue>{id}</premis:relatedObjectIdentifierValue>\n      </premis:relatedObjectIdentification>\n    </premis:relationship>\n  </premis:object>\n'
+                    fo.write(fill_premis)
+        fo.write(end_premis)
 
-    ET.indent(premisfile, '  ')
-    premisfile.write(premis_path, encoding="UTF-8", xml_declaration=True, short_empty_elements=False)
-
-def configure_sip_mets(mets_path, id, tarfolder, creation_date, premis_path):
+def configure_sip_mets(mets_path, id, tarfolder, creation_date, premis_path): #TODO
     print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Configuring sip mets.xml...')
-    ET.register_namespace('mets', "http://www.loc.gov/METS/")
-    ET.register_namespace('xlink', "http://www.w3.org/1999/xlink")
-    metsfile = ET.parse(mets_path)
-    xml_root = metsfile.getroot()
-    xml_root.attrib.update({"OBJID": f'UUID:{id}', "ID": f'ID{uuid1()}', "LABEL": label_entry.get()})
-
-    xml_root[0].attrib["CREATEDATE"] = creation_date
-    xml_root[0][0][0].text = archivist_org_combo.get() #Archivist
-    xml_root[0][1][0].text = system_combo.get() #System name
-    xml_root[0][2][0].text = system_ver_entry.get() #System version
-    xml_root[0][3][0].text = type_combo.get() #Type
-    xml_root[0][4][0].text = creator_entry.get() #Creator
-    xml_root[0][5][0].text = producer_org_entry.get() #Producer org
-    xml_root[0][6][0].text = producer_pers_entry.get() #Producer person
-    xml_root[0][7][0].text = producer_software_entry.get() #Producer software
-    xml_root[0][8][0].text = submitter_org_combo.get() #Submitter org
-    xml_root[0][9][0].text = submitter_pers_entry.get() #Submitter person
-    xml_root[0][10][0].text = owner_org_combo.get() #Owner
-    xml_root[0][11][0].text = preserver_entry.get() #Preserver
-    xml_root[0][12].text = submission_entry.get() #ID
-    xml_root[0][13].text = period_start_entry.get() #Start
-    xml_root[0][14].text = period_end_entry.get() #End
-
-    xml_root[1][0][0].attrib.update({"SIZE": str(os.stat(premis_path).st_size), "ID": f'ID{uuid1()}', "CREATED": datetime.fromtimestamp(os.path.getmtime(premis_path)).strftime("%Y-%m-%dT%H:%M:%S+02:00")})
-    xml_root[3][0][0][0].attrib["FILEID"] = xml_root[1][0][0].attrib["ID"]
-    with open(premis_path, "rb") as f:
-        tmp_data = f.read()
-    xml_root[1][0][0].attrib["CHECKSUM"] = hashlib.sha256(tmp_data).hexdigest()
-
-    for root, _, files in os.walk(tarfolder):
-        for file in files:
-            tmp_path = "file:" + (root.replace("\\", "/") + "/" + file).removeprefix(f'{tarfolder}/')
-            if tmp_path != "file:administrative_metadata/premis.xml" and tmp_path != "file:mets.xml":
-                if tmp_path == "file:administrative_metadata/DIAS_PREMIS.xsd":
-                    xml_root[2][0][0].attrib.update({"ID": f'ID{uuid1()}', "CREATED": datetime.fromtimestamp(os.path.getmtime(os.path.join(root,file))).strftime("%Y-%m-%dT%H:%M:%S+02:00")})
-                    xml_root[3][0][1][0].attrib["FILEID"] = xml_root[2][0][0].attrib["ID"]
-                elif tmp_path == "file:mets.xsd":
-                    xml_root[2][0][1].attrib.update({"ID": f'ID{uuid1()}', "CREATED": datetime.fromtimestamp(os.path.getmtime(os.path.join(root,file))).strftime("%Y-%m-%dT%H:%M:%S+02:00")})
-                    xml_root[3][0][1][1].attrib["FILEID"] = xml_root[2][0][1].attrib["ID"]
-                else:
-                    xml_root[2][0].append(copy.deepcopy(xml_root[2][0][0]))
-                    xml_root[3][0][1].append(copy.deepcopy(xml_root[3][0][1][0]))
-                    xml_root[2][0][-1].attrib.update({"SIZE": str(os.stat(os.path.join(root,file)).st_size), "ID": f'ID{uuid1()}', "CHECKSUM": INFO_DICT[f'{id}/{tmp_path[5:]}'][0], "MIMETYPE": INFO_DICT[f'{id}/{tmp_path[5:]}'][1], "CREATED": datetime.fromtimestamp(os.path.getmtime(os.path.join(root,file))).strftime("%Y-%m-%dT%H:%M:%S+02:00")})
-                    xml_root[2][0][-1][0].attrib["{http://www.w3.org/1999/xlink}href"] = tmp_path
-                    xml_root[3][0][1][-1].attrib["FILEID"] = xml_root[2][0][-1].attrib["ID"]
-
-    ET.indent(metsfile, '  ')
-    metsfile.write(mets_path, encoding="UTF-8", xml_declaration=True, short_empty_elements=True)
+    with open(mets_path, "w", encoding="utf-8") as fo:
+        sha = hashlib.sha256()
+        with open(premis_path, "rb") as f:
+            tmp_data = f.read(4000000)
+            while len(tmp_data)>0:
+                sha.update(tmp_data)
+                tmp_data = f.read(4000000)
+        id_list = [f'ID{uuid1()}']
+        start_mets = f'<?xml version="1.0" encoding="UTF-8"?>\n<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/METS/ http://schema.arkivverket.no/METS/mets.xsd" PROFILE="http://xml.ra.se/METS/RA_METS_eARD.xml" LABEL="{label_entry.get()}" TYPE="SIP" ID="ID{uuid1()}" OBJID="UUID:{id}">\n    <mets:metsHdr CREATEDATE="{creation_date}" RECORDSTATUS="NEW">\n        <mets:agent TYPE="ORGANIZATION" ROLE="ARCHIVIST">\n            <mets:name>{archivist_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{system_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{system_ver_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{type_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="CREATOR">\n            <mets:name>{creator_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_org_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_pers_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_software_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="SUBMITTER">\n            <mets:name>{submitter_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="SUBMITTER">\n            <mets:name>{submitter_pers_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="IPOWNER">\n            <mets:name>{owner_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="PRESERVATION">\n            <mets:name>{preserver_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:altRecordID TYPE="SUBMISSIONAGREEMENT">{submission_entry.get()}</mets:altRecordID>\n        <mets:altRecordID TYPE="STARTDATE">{period_start_entry.get()}</mets:altRecordID>\n        <mets:altRecordID TYPE="ENDDATE">{period_end_entry.get()}</mets:altRecordID>\n        <mets:metsDocumentID>mets.xml</mets:metsDocumentID>\n    </mets:metsHdr>\n    <mets:amdSec ID="amdSec001">\n        <mets:digiprovMD ID="digiprovMD001">\n            <mets:mdRef MIMETYPE="text/xml" CHECKSUMTYPE="SHA-256" CHECKSUM="{sha.hexdigest()}" MDTYPE="PREMIS" xlink:href="file:administrative_metadata/premis.xml" LOCTYPE="URL" CREATED="{datetime.fromtimestamp(os.path.getmtime(premis_path)).strftime("%Y-%m-%dT%H:%M:%S+02:00")}" xlink:type="simple" ID="{id_list[-1]}" SIZE="{os.stat(premis_path).st_size}"/>\n        </mets:digiprovMD>\n    </mets:amdSec>\n    <mets:fileSec>\n        <mets:fileGrp ID="fgrp001" USE="FILES">\n'
+        end_mets = f'            </mets:div>\n        </mets:div>\n    </mets:structMap>\n</mets:mets>'
+        fo.write(start_mets)
+        for root, _, files in os.walk(tarfolder):
+            for file in files:
+                tmp_path = "file:" + (root.replace("\\", "/") + "/" + file).removeprefix(f'{tarfolder}/')
+                if tmp_path != "file:administrative_metadata/premis.xml" and tmp_path != "file:mets.xml":
+                    id_list.append(f'ID{uuid1()}')
+                    fill_mets = f'            <mets:file MIMETYPE="{INFO_DICT[id+"/"+tmp_path[5:]][1]}" CHECKSUMTYPE="SHA-256" CREATED="{datetime.fromtimestamp(os.path.getmtime(os.path.join(root,file))).strftime("%Y-%m-%dT%H:%M:%S+02:00")}" CHECKSUM="{INFO_DICT[id+"/"+tmp_path[5:]][0]}" USE="Datafile" ID="{id_list[-1]}" SIZE="{os.stat(os.path.join(root,file)).st_size}">\n                <mets:FLocat xlink:href="{tmp_path}" LOCTYPE="URL" xlink:type="simple"/>\n            </mets:file>\n'
+                    fo.write(fill_mets)
+        fill_mets = f'        </mets:fileGrp>\n    </mets:fileSec>\n    <mets:structMap>\n        <mets:div LABEL="Package">\n            <mets:div ADMID="amdSec001" LABEL="Content Description">\n                <mets:fptr FILEID="{id_list.pop(0)}"/>\n            </mets:div>\n            <mets:div ADMID="amdSec001" LABEL="Datafiles">\n'
+        fo.write(fill_mets)
+        while id_list:
+            fill_mets = f'                <mets:fptr FILEID="{id_list.pop(0)}"/>\n'
+            fo.write(fill_mets)
+        fo.write(end_mets)
 
 def configure_sip_info(info_path, tar_path, id, creation_date):
     print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Configuring sip info.xml...')
-    infofile = ET.parse(info_path)
-    xml_root = infofile.getroot()
-    xml_root.attrib.update({"OBJID": f'UUID:{id}', "ID": f'ID{uuid1()}', "LABEL": label_entry.get()})
-    
-    xml_root[0].attrib["CREATEDATE"] = creation_date
-    xml_root[0][0][0].text = archivist_org_combo.get() #Archivist
-    xml_root[0][1][0].text = system_combo.get() #System name
-    xml_root[0][2][0].text = system_ver_entry.get() #System version
-    xml_root[0][3][0].text = type_combo.get() #Type
-    xml_root[0][4][0].text = creator_entry.get() #Creator
-    xml_root[0][5][0].text = producer_org_entry.get() #Producer org
-    xml_root[0][6][0].text = producer_pers_entry.get() #Producer person
-    xml_root[0][7][0].text = producer_software_entry.get() #Producer software
-    xml_root[0][8][0].text = submitter_org_combo.get() #Submitter org
-    xml_root[0][9][0].text = submitter_pers_entry.get() #Submitter person
-    xml_root[0][10][0].text = owner_org_combo.get() #Owner
-    xml_root[0][11][0].text = preserver_entry.get() #Preserver
-    xml_root[0][12].text = submission_entry.get() #ID
-    xml_root[0][13].text = period_start_entry.get() #Start
-    xml_root[0][14].text = period_end_entry.get() #End
-
-    xml_root[1][0][0].attrib.update({"SIZE": str(os.stat(tar_path).st_size), "ID": f'ID{uuid1()}', "CREATED": datetime.fromtimestamp(os.path.getmtime(tar_path)).strftime("%Y-%m-%dT%H:%M:%S+02:00")})
-    xml_root[2][0][1][0].attrib["FILEID"] = xml_root[1][0][0].attrib["ID"]
+    extra_id = f'ID{uuid1()}'
     sha = hashlib.sha256()
     with open(tar_path, "rb") as f:
         tmp_data = f.read(4000000)
         while len(tmp_data)>0:
             sha.update(tmp_data)
             tmp_data = f.read(4000000)
-    xml_root[1][0][0].attrib["CHECKSUM"] = sha.hexdigest()
-    xml_root[1][0][0][0].attrib["{http://www.w3.org/1999/xlink}href"] = f'file:{os.path.basename(tar_path)}'
-
-    ET.indent(infofile, '  ')
-    infofile.write(info_path, encoding="UTF-8", xml_declaration=True, short_empty_elements=True)
+    with open(info_path, "w", encoding="utf-8") as fo:
+        string_info = f'<?xml version="1.0" encoding="UTF-8"?>\n<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/METS/ http://schema.arkivverket.no/METS/info.xsd" PROFILE="http://xml.ra.se/METS/RA_METS_eARD.xml" LABEL="{label_entry.get()}" TYPE="SIP" ID="ID{uuid1()}" OBJID="UUID:{id}">\n    <mets:metsHdr CREATEDATE="{creation_date}" RECORDSTATUS="NEW">\n        <mets:agent TYPE="ORGANIZATION" ROLE="ARCHIVIST">\n            <mets:name>{archivist_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{system_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{system_ver_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="ARCHIVIST">\n            <mets:name>{type_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="CREATOR">\n            <mets:name>{creator_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_org_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_pers_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="OTHER" OTHERTYPE="SOFTWARE" ROLE="OTHER" OTHERROLE="PRODUCER">\n            <mets:name>{producer_software_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="OTHER" OTHERROLE="SUBMITTER">\n            <mets:name>{submitter_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="INDIVIDUAL" ROLE="OTHER" OTHERROLE="SUBMITTER">\n            <mets:name>{submitter_pers_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="IPOWNER">\n            <mets:name>{owner_org_combo.get()}</mets:name>\n        </mets:agent>\n        <mets:agent TYPE="ORGANIZATION" ROLE="PRESERVATION">\n            <mets:name>{preserver_entry.get()}</mets:name>\n        </mets:agent>\n        <mets:altRecordID TYPE="SUBMISSIONAGREEMENT">{submission_entry.get()}</mets:altRecordID>\n        <mets:altRecordID TYPE="STARTDATE">{period_start_entry.get()}</mets:altRecordID>\n        <mets:altRecordID TYPE="ENDDATE">{period_end_entry.get()}</mets:altRecordID>\n        <mets:metsDocumentID>info.xml</mets:metsDocumentID>\n    </mets:metsHdr>\n    <mets:fileSec>\n        <mets:fileGrp ID="fgrp001" USE="FILES">\n            <mets:file MIMETYPE="application/x-tar" CHECKSUMTYPE="SHA-256" CREATED="{datetime.fromtimestamp(os.path.getmtime(tar_path)).strftime("%Y-%m-%dT%H:%M:%S+02:00")}" CHECKSUM="{sha.hexdigest()}" USE="Datafile" ID="{extra_id}" SIZE="{os.stat(tar_path).st_size}">\n                <mets:FLocat xlink:href="file:{os.path.basename(tar_path)}" LOCTYPE="URL" xlink:type="simple"/>\n            </mets:file>\n        </mets:fileGrp>\n    </mets:fileSec>\n    <mets:structMap>\n        <mets:div LABEL="Package">\n            <mets:div LABEL="Content Description"/>\n            <mets:div LABEL="Datafiles">\n                <mets:fptr FILEID="{extra_id}"/>\n            </mets:div>\n        </mets:div>\n    </mets:structMap>\n</mets:mets>'
+        fo.write(string_info)
 
 def configure_aic_log(log_path, aic_id, sip_id, create_date):
     print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Configuring aic log.xml...')
-    logfile = ET.parse(log_path)
-    xml_root = logfile.getroot()
-    xml_root.attrib["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
-    
-    xml_root[0][0][1].text = sip_id
-    xml_root[0][2][1].text = aic_id
-    xml_root[0][3][1].text = create_date
-    xml_root[0][4][1].text = archivist_org_combo.get()
-    xml_root[0][5][1].text = label_entry.get()
-    xml_root[0][9][2][1].text = aic_id
-    xml_root[1][0][1].text = str(uuid1())
-    xml_root[1][2].text = create_date
-    xml_root[1][6][1].text = sip_id
-    
-    logfile.write(log_path, encoding="UTF-8", xml_declaration=True, short_empty_elements=False)
+    with open(log_path, "w", encoding="utf-8") as fo:
+        string_log = f'<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<premis:premis xmlns:premis="http://arkivverket.no/standarder/PREMIS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://arkivverket.no/standarder/PREMIS http://schema.arkivverket.no/PREMIS/v2.0/DIAS_PREMIS.xsd" version="2.0">\n  <premis:object xsi:type="premis:file">\n    <premis:objectIdentifier>\n      <premis:objectIdentifierType>NO/RA</premis:objectIdentifierType>\n      <premis:objectIdentifierValue>{sip_id}</premis:objectIdentifierValue>\n    </premis:objectIdentifier>\n    <premis:preservationLevel>\n      <premis:preservationLevelValue>full</premis:preservationLevelValue>\n    </premis:preservationLevel>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>aic_object</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{aic_id}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>createdate</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{create_date}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>archivist_organization</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{archivist_org_combo.get()}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>label</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>{label_entry.get()}</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:significantProperties>\n      <premis:significantPropertiesType>iptype</premis:significantPropertiesType>\n      <premis:significantPropertiesValue>SIP</premis:significantPropertiesValue>\n    </premis:significantProperties>\n    <premis:objectCharacteristics>\n      <premis:compositionLevel>0</premis:compositionLevel>\n      <premis:format>\n        <premis:formatDesignation>\n          <premis:formatName>tar</premis:formatName>\n        </premis:formatDesignation>\n      </premis:format>\n    </premis:objectCharacteristics>\n    <premis:storage>\n      <premis:storageMedium>Preservation platform ESSArch</premis:storageMedium>\n    </premis:storage>\n    <premis:relationship>\n      <premis:relationshipType>structural</premis:relationshipType>\n      <premis:relationshipSubType>is part of</premis:relationshipSubType>\n      <premis:relatedObjectIdentification>\n        <premis:relatedObjectIdentifierType>NO/RA</premis:relatedObjectIdentifierType>\n        <premis:relatedObjectIdentifierValue>{aic_id}</premis:relatedObjectIdentifierValue>\n      </premis:relatedObjectIdentification>\n    </premis:relationship>\n  </premis:object>\n  <premis:event>\n    <premis:eventIdentifier>\n      <premis:eventIdentifierType>NO/RA</premis:eventIdentifierType>\n      <premis:eventIdentifierValue>{uuid1()}</premis:eventIdentifierValue>\n    </premis:eventIdentifier>\n    <premis:eventType>20000</premis:eventType>\n    <premis:eventDateTime>{create_date}</premis:eventDateTime>\n    <premis:eventDetail>Created log circular</premis:eventDetail>\n    <premis:eventOutcomeInformation>\n      <premis:eventOutcome>0</premis:eventOutcome>\n      <premis:eventOutcomeDetail>\n        <premis:eventOutcomeDetailNote>Success to create logfile</premis:eventOutcomeDetailNote>\n      </premis:eventOutcomeDetail>\n    </premis:eventOutcomeInformation>\n    <premis:linkingAgentIdentifier>\n      <premis:linkingAgentIdentifierType>NO/RA</premis:linkingAgentIdentifierType>\n      <premis:linkingAgentIdentifierValue>admin</premis:linkingAgentIdentifierValue>\n    </premis:linkingAgentIdentifier>\n    <premis:linkingObjectIdentifier>\n      <premis:linkingObjectIdentifierType>NO/RA</premis:linkingObjectIdentifierType>\n      <premis:linkingObjectIdentifierValue>{sip_id}</premis:linkingObjectIdentifierValue>\n    </premis:linkingObjectIdentifier>\n  </premis:event>\n</premis:premis>'
+        fo.write(string_log)
 
 #Main function
 def main_func():
     if content_path_label.cget("text") and all(len(i.get()) != 0 for i in TEXT_LIST):
-        print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Starting process...')
+        print(f'[{datetime.now().strftime("%d/%m/%y - %H:%M:%S")}]: Building structure...')
         sip_id = uuid1()
 
-        template_folder = "./template"
-        output_folder = f'./out'
+        output_folder = 1
+        while(os.path.isdir(f'./{output_folder}')):
+            output_folder += 1
+        output_folder = f'./{output_folder}'
         tarfile = f'{output_folder}/{sip_id}/content/{sip_id}'
-        
-        shutil.copytree(template_folder, output_folder, copy_function=shutil.copy)
-        shutil.copytree(os.path.abspath(content_path_label.cget("text")), f'{output_folder}/top/content/bottom/content', copy_function=shutil.copy, dirs_exist_ok=True)
+
+        os.makedirs(f'{output_folder}/{sip_id}/administrative_metadata/repository_operations')
+        os.makedirs(f'{output_folder}/{sip_id}/descriptive_metadata')
+        os.makedirs(f'{tarfile}/administrative_metadata')
+        os.makedirs(f'{tarfile}/descriptive_metadata')
+        os.makedirs(f'{tarfile}/content')
+
+        shutil.copy(os.path.join(sys._MEIPASS, "files/mets.xsd"), f'{tarfile}/mets.xsd')
+        shutil.copy(os.path.join(sys._MEIPASS, "files/DIAS_PREMIS.xsd"), f'{tarfile}/administrative_metadata/DIAS_PREMIS.xsd')
+        shutil.copytree(os.path.abspath(content_path_label.cget("text")), f'{tarfile}/content', copy_function=shutil.copy, dirs_exist_ok=True)
         if descriptive_path_label.cget("text"):
-            shutil.copytree(os.path.abspath(descriptive_path_label.cget("text")), f'{output_folder}/top/content/bottom/descriptive_metadata', copy_function=shutil.copy, dirs_exist_ok=True)
+            shutil.copytree(os.path.abspath(descriptive_path_label.cget("text")), f'{tarfile}/descriptive_metadata', copy_function=shutil.copy, dirs_exist_ok=True)
         if administrative_path_label.cget("text"):
-            shutil.copytree(os.path.abspath(administrative_path_label.cget("text")), f'{output_folder}/top/content/bottom/administrative_metadata', copy_function=shutil.copy, dirs_exist_ok=True)
-        
-        os.rename(f'{output_folder}/top', f'{output_folder}/{sip_id}')
-        os.rename(f'{output_folder}/{sip_id}/content/bottom', tarfile)
+            shutil.copytree(os.path.abspath(administrative_path_label.cget("text")), f'{tarfile}/administrative_metadata', copy_function=shutil.copy, dirs_exist_ok=True)
 
         #Zone 1
         configure_sip_log(f'{tarfile}/log.xml', str(sip_id), datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"))

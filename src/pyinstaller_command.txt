@@ -1,0 +1,1 @@
+pyinstaller.exe --onefile -n "ET_Producer" --add-data="template_files\mets.xsd;files" --add-data="template_files\DIAS_PREMIS.xsd;files" .\ET_Producer.py
