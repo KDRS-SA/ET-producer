@@ -3,15 +3,15 @@ A lightweight and simple program designed to combine the "ESSARCH tools for prod
 
 ## 1. Prerequisites ##
 
-As far as we know there should be no pre-requisites, although the program has only been tested on windows 10/11 computers.
+- Requires [7-zip](https://www.7-zip.org/download.html).
+- Note: Program has only been tested on windows 10/11 computers.
 
 ## 2. Simple Guide ##
 
-1. Run the ET_Producer.exe file, and wait for the terminal and application window to appear. Ignore the terminal for now and go to the application window.
-2. Fill in all the provided metadata text-input fields (All fields are mandatory according to the standard, so none should be left empty).
-3. Press the "Browse Content" button, and select the folder containing every item you wish to add to the dias package's content folder. Optionally you may do the same with the "Browse Descriptive Metadata" and "Browse Administrative Metadata" buttons to add files to Descriptive Metadata and Administrative metadata folders respectively.
-4. Press the "Create Dias Package" button to start the process. While the process is running you can navigate to the terminal window where an update is posted at the start of each internal step.
-5. A message should pop-up informing you when the process is finished. When it does, navigate to the folder where the ET_Producer.exe file is located. There will be a new folder here now, which is equivalent to the output of ETA and is ready to be transferred to EPP.
-
-## 3. Importing metadata from mets.xml file ##
-1. By pressing the "Import mets.xml Metadata (optional)" button in the GUI that shows up when running the ET_Producer.exe program, a file explorer will show up. Use this to navigate to the xml file containing the mets structure, and press open. The program will then, in a best effort attempt, autofill some of the input fields with the data of the mets xml-file. Make sure to doublecheck that all fields are correct before proceeding.
+1. Run the ET_Producer.exe file and wait for the application window to appear.
+2. Press the "Browse Content" button, and select the folder containing every item you wish to add to the dias package's content folder.
+2-1. Optionally press "Browse Descriptive Metadata" and/or "Browse Administrative Metadata" to select a folder containing files you wish to add to these folders in the dias package as well.
+3. When input folders have been selected press the "Continue" button to proceed to the next page. Here you must fill in all the provided metadata text-input fields (as all of them are mandatory).
+3-1. Optionally you may also press the "Import mets.xml Metadata" button at the top of the window, which will open a file explorer which may be used to select a mets.xml file that the program then will use to, in a best effort attempt, autofill some of the input fields. If you use this functionality make sure to doublecheck that all the fields are correct before proceeding.
+3-2. Additionally you may also optionally press the "Username: admin" button at the top of the window to change the username of the user creating the dias package (for example to your essarch username).
+4. Finally press the "Create Dias Package" button to start the process. This may take some time depending on the amount of content, but when it is done a popup should appear.
