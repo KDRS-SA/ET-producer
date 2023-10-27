@@ -1,1 +1,0 @@
-pyinstaller.exe --noconsole --onefile -n "ET_Producer" --add-data="c:\users\jonatan\appdata\local\programs\python\python310\lib\site-packages\customtkinter;customtkinter" --add-data="template_files\mets.xsd;files" --add-data="template_files\DIAS_PREMIS.xsd;files" .\ET_Producer.py
